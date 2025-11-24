@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<!-- Add class="dark" to html tag for dark mode -->
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Kepert - Portfolio</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Dark Mode Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-yellow': '#DFFF00',
+                        'card-dark': '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Load Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Base font */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Light mode background */
+            background-color: #f4f4f5; /* zinc-100 */
+            color: #18181b; /* zinc-900 */
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Dark mode styles */
+        .dark body {
+            background-color: #000;
+            color: #fff;
+            /* Subtle noise pattern from the design */
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"%3E%3Cfilter id="n" x="0" y="0"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23n)" opacity="0.1"/%3E%3C/svg%3E');
+        }
+
+        /* Custom accent color */
+        .text-primary-yellow {
+            color: #DFFF00; /* A vibrant lime/yellow */
+        }
+        .bg-primary-yellow {
+            background-color: #DFFF00;
+        }
+
+        /* Custom card background */
+        .bg-card-dark {
+            background-color: #1a1a1a;
+        }
+        
+        /* Light/Dark mode card backgrounds */
+        .bg-card {
+            background-color: #ffffff; /* Light mode card */
+        }
+        .dark .bg-card {
+            background-color: #1a1a1a; /* Dark mode card */
+        }
+        .bg-card-light {
+             background-color: #ffffff;
+        }
+        .dark .bg-card-light {
+             background-color: #111111; /* Slightly lighter than black for services */
+        }
+        
+        /* Light/Dark mode text */
+        .text-default {
+            color: #18181b; /* zinc-900 */
+        }
+        .dark .text-default {
+            color: #fff;
+        }
+        .text-muted {
+            color: #52525b; /* zinc-600 */
+        }
+        .dark .text-muted {
+            color: #a1a1aa; /* zinc-400 */
+        }
+
+        /* Custom progress bar */
+        .progress-bar {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            background-color: #e4e4e7; /* zinc-200 */
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .dark .progress-bar {
+            background-color: #333;
+        }
+        .progress-bar-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #DFFF00;
+            border-radius: 99px;
+        }
+
+        /* Faded background text - Positioned higher */
+        .faded-text {
+            font-size: 10rem;
+            font-weight: 900;
+            color: rgba(55, 55, 55, 0.1); /* Lighter for light mode */
+            position: absolute;
+            z-index: 0;
+            line-height: 1;
+            user-select: none;
+            top: 15%;
+            left: 15%;
+            transform: translate(-15%, -15%);
+        }
+        .dark .faded-text {
+            color: rgba(55, 55, 55, 0.2);
+        }
+        
+        /* Star rating */
+        .star {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjREZGRjAwIiBzdHJva2U9IiNERkZGMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0YXIiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAxNS4wOSA4LjI2IDIyIDkuMjcgMTcuNTYgMTQuMTQgMTguNDEgMjIgMTIgMTguNzYgNS41OSAyMiA2LjQ0IDE0LjE0IDEgOS4yNyA4LjkxIDguMjYgMTIgMiIvPjwvc3ZnPg==');
+            background-size: contain;
+        }
+        .star-empty {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNERkZGMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0YXIiPjxwb2x5Z29uIHBvaW50cz0iMTIgMiAxNS4wOSA4LjI2IDIyIDkuMjcgMTcuNTYgMTQuMTQgMTguNDEgMjIgMTIgMTguNzYgNS41OSAyMiA2LjQ0IDE0LjE0IDEgOS4yNyA4LjkxIDguMjYgMTIgMiIvPjwvc3ZnPg==');
+            background-size: contain;
+        }
+
+        /* Project gallery filter button */
+        .filter-btn.active {
+            background-color: #DFFF00 !important;
+            color: #000 !important;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .stagger-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .progress-bar-inner {
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Testimonial carousel styles */
+        .testimonial-carousel {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .testimonial-slide {
+            flex: 0 0 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .testimonial-slide {
+                flex: 0 0 50%;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .testimonial-slide {
+                flex: 0 0 33.333%;
+            }
+        }
+        
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #d1d5db;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .carousel-dot.active {
+            background-color: #DFFF00;
+        }
+    </style>
+</head>
+<body class="bg-zinc-100 dark:bg-black text-default relative">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-sm shadow-sm dark:shadow-none">
+        <nav class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-2">
+                  
+
+                    <span class="font-extrabold text-xl tracking-tight text-default">  <span class="text-primary-yellow"><  </span>  SHAMIM's <span class="text-primary-yellow">BIO</span> <span class="text-primary-yellow">/> </span>  </span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#home" class="font-medium text-primary-yellow hover:text-zinc-500 dark:hover:text-white transition-colors">HOME</a>
+                    <a href="#about" class="font-medium text-muted hover:text-primary-yellow transition-colors">ABOUT ME</a>
+                    <a href="#services" class="font-medium text-muted hover:text-primary-yellow transition-colors">SERVICES</a>
+                    <a href="#projects" class="font-medium text-muted hover:text-primary-yellow transition-colors">PROJECTS</a>
+                    <a href="#blog" class="font-medium text-muted hover:text-primary-yellow transition-colors">BLOG</a>
+                    <a href="#contact" class="font-medium text-muted hover:text-primary-yellow transition-colors">CONTACT</a>
+                    
+                    <div class="flex items-center space-x-4 pl-4 border-l border-gray-200 dark:border-gray-700">
+                        <a href="#" class="text-gray-400 hover:text-primary-yellow"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary-yellow"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary-yellow"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    </div>
+
+                    <!-- Light/Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full text-gray-400 hover:text-primary-yellow">
+                        <i id="theme-icon-sun" data-lucide="sun" class="w-5 h-5 hidden"></i> <!-- Hidden by default, shown by JS -->
+                        <i id="theme-icon-moon" data-lucide="moon" class="w-5 h-5 hidden"></i> <!-- Hidden by default, shown by JS -->
+                    </button>
+                    
+                    <a href="#contact" class="bg-primary-yellow text-black font-bold px-6 py-2 rounded-full hover:bg-opacity-80 dark:hover:bg-white transition-colors">HIRE ME</a>
+                </div>
+
+                <!-- Mobile Nav Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-default">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 absolute top-full left-0 w-full bg-white dark:bg-black shadow-lg">
+                <a href="#home" class="block px-4 py-2 text-default font-medium hover:bg-gray-100 dark:hover:bg-gray-800">HOME</a>
+                <a href="#about" class="block px-4 py-2 text-default font-medium hover:bg-gray-100 dark:hover:bg-gray-800">ABOUT ME</a>
+                <a href="#services" class="block px-4 py-2 text-default font-medium hover:bg-gray-100 dark:hover:bg-gray-800">SERVICES</a>
+                <a href="#projects" class="block px-4 py-2 text-default font-medium hover:bg-gray-100 dark:hover:bg-gray-800">PROJECTS</a>
+                <a href="#blog" class="block px-4 py-2 text-default font-medium hover:bg-gray-100 dark:hover:bg-gray-800">BLOG</a>
+                <a href="#contact" class="block px-4 py-2 text-default font-medium hover:bg-gray-100 dark:hover:bg-gray-800">CONTACT</a>
+                <a href="#contact" class="block px-4 py-2 m-2 bg-primary-yellow text-black font-bold text-center rounded-full">HIRE ME</a>
+                <div class="flex justify-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700 mt-2">
+                    <a href="#" class="text-gray-400 hover:text-primary-yellow"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-primary-yellow"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-primary-yellow"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    
+                    <!-- Mobile Theme Toggle -->
+                    <button id="theme-toggle-mobile" class="p-2 rounded-full text-gray-400 hover:text-primary-yellow">
+                        <i id="theme-icon-sun-mobile" data-lucide="sun" class="w-5 h-5 hidden"></i>
+                        <i id="theme-icon-moon-mobile" data-lucide="moon" class="w-5 h-5 hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Section 1: Hero (from 1.jpg) -->
+        <section id="home" class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative overflow-hidden">
+            <!-- Faded Text: Positioned higher -->
+            <span class="faded-text">WEB DESIGN AND DEVELOPMENT</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10">
+                <!-- Left Content -->
+                <div class="flex flex-col space-y-6 text-center md:text-left fade-in">
+                    <span class="text-xl font-medium slide-in-left">Hello, I'm</span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-default slide-in-left">Shamim <span class="text-primary-yellow">Mian.</span></h1>
+                    <p class="text-lg text-muted max-w-lg mx-auto md:mx-0 slide-in-left">
+                        Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices auctor enim possimus excepteur, vero, veritatis perspiciatis. Ultrices moles accumsan et delectus inseot sot sapiente odit vero doloremque !
+                    </p>
+                    <div class="pt-4 slide-in-left">
+                        <span class="text-muted">Feel Free To Contact Me</span>
+                        <a href="mailto:shamimmian91@gmail.com" class="block text-xl font-semibold text-default hover:text-primary-yellow transition-colors">shamimmian91@gmail.com</a>
+                    </div>
+                </div>
+                
+                <!-- Right Content (Image) -->
+                <div class="flex justify-center slide-in-right">
+                    <img src="img/Abdur_Noor1.jpg" alt="Thomas Kepert" class="rounded-lg object-cover w-full max-w-md">
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="flex flex-col md:flex-row justify-between items-center mt-12 md:mt-20 space-y-4 md:space-y-0 relative z-10 fade-in">
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="p-2 border border-gray-300 dark:border-gray-700 rounded-full text-muted hover:border-primary-yellow hover:text-primary-yellow transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="#" class="p-2 border border-gray-300 dark:border-gray-700 rounded-full text-muted hover:border-primary-yellow hover:text-primary-yellow transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" class="p-2 border border-gray-300 dark:border-gray-700 rounded-full text-muted hover:border-primary-yellow hover:text-primary-yellow transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="p-2 border border-gray-300 dark:border-gray-700 rounded-full text-muted hover:border-primary-yellow hover:text-primary-yellow transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+                <button class="flex items-center space-x-3 group">
+                    <span class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-yellow text-black group-hover:bg-opacity-80 dark:group-hover:bg-white transition-colors">
+                        <i data-lucide="play" class="w-5 h-5 fill-black"></i>
+                    </span>
+                    <span class="font-medium text-lg text-default group-hover:text-primary-yellow transition-colors">Visualize Success Through Me.</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 2: About Me (from 2.jpg) -->
+        <section id="about" class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content (Images) -->
+                <div class="relative w-full max-w-lg mx-auto fade-in">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Design Workspace" class="rounded-2xl shadow-lg w-full">
+                    <div class="absolute -bottom-10 -left-10 w-48 h-48 border-8 border-white dark:border-black rounded-full overflow-hidden shadow-xl slide-in-left">
+                        <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80" alt="Video Thumbnail" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                            <button class="w-16 h-16 rounded-full bg-primary-yellow text-black flex items-center justify-center hover:bg-white transition-colors">
+                                <i data-lucide="play" class="w-6 h-6 fill-black"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content (Text) -->
+                <div class="flex flex-col space-y-6 slide-in-right">
+                    <span class="font-medium text-muted">About Me</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-default">I Design & Build Ultimate <span class="text-primary-yellow">Things.</span></h2>
+                    <p class="text-lg text-muted">
+                        Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices auctor enim possimus excepteur, vero, veritatis perspiciatis.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-4 text-default">
+                        <div class="flex items-center space-x-2 stagger-item">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-primary-yellow"></i>
+                            <span>Social Marketing</span>
+                        </div>
+                        <div class="flex items-center space-x-2 stagger-item">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-primary-yellow"></i>
+                            <span>Market Analysis</span>
+                        </div>
+                        <div class="flex items-center space-x-2 stagger-item">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-primary-yellow"></i>
+                            <span>SEO Consultancy</span>
+                        </div>
+                        <div class="flex items-center space-x-2 stagger-item">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-primary-yellow"></i>
+                            <span>Page Ranking</span>
+                        </div>
+                    </div>
+                    <div class="pt-6">
+                        <a href="#" class="bg-primary-yellow text-black font-bold px-8 py-3 rounded-full hover:bg-opacity-80 dark:hover:bg-white transition-colors">MORE ABOUT ME</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Section (from 2.jpg) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mt-20 md:mt-32">
+                <div class="stagger-item">
+                    <span class="text-6xl font-extrabold text-primary-yellow">100%</span>
+                    <p class="text-lg text-muted mt-2">CUSTOMER SATISFACTION</p>
+                </div>
+                <div class="stagger-item">
+                    <span class="text-6xl font-extrabold text-primary-yellow">350+</span>
+                    <p class="text-lg text-muted mt-2">PROJECT COMPLETED</p>
+                </div>
+                <div class="stagger-item">
+                    <span class="text-6xl font-extrabold text-primary-yellow">175+</span>
+                    <p class="text-lg text-muted mt-2">CLIENT POSTIVE REVIEWS</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Services (from 3.png) -->
+        <section id="services" class="bg-zinc-200 dark:bg-card-dark py-20 md:py-32">
+            <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+                    <span class="font-medium text-muted">My Services</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mt-2 mb-4 text-default">Featured <span class="text-primary-yellow">Services.</span></h2>
+                    <p class="text-lg text-muted">
+                        Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices auctor enim possimus excepteur, vero, veritatis perspiciatis.
+                    </p>
+                </div>
+                
+                <!-- Services Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Service Card 1 -->
+                    <div class="bg-card-light text-default p-8 rounded-2xl relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-yellow/20 hover:-translate-y-1 scale-in">
+                        <span class="absolute top-4 right-8 text-7xl font-extrabold text-zinc-300 dark:text-gray-800 opacity-50">01</span>
+                        <div class="relative z-10">
+                            <i data-lucide="triangle" class="w-12 h-12 text-primary-yellow mb-4"></i>
+                            <div class="flex space-x-2 mb-4">
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">UI/UX</span>
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">DESIGN</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Product Design</h3>
+                            <p class="text-muted">
+                                Cunique totum numquam dolore hic montes elem entum tempor at velit.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Service Card 2 -->
+                    <div class="bg-card-light text-default p-8 rounded-2xl relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-yellow/20 hover:-translate-y-1 scale-in">
+                        <span class="absolute top-4 right-8 text-7xl font-extrabold text-zinc-300 dark:text-gray-800 opacity-50">02</span>
+                        <div class="relative z-10">
+                            <i data-lucide="layers" class="w-12 h-12 text-primary-yellow mb-4"></i>
+                            <div class="flex space-x-2 mb-4">
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">DEVELOPMENT</span>
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">UI/UX</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Web Developments</h3>
+                            <p class="text-muted">
+                                Cunique totum numquam dolore hic montes elem entum tempor at velit.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Service Card 3 -->
+                    <div class="bg-card-light text-default p-8 rounded-2xl relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-yellow/20 hover:-translate-y-1 scale-in">
+                        <span class="absolute top-4 right-8 text-7xl font-extrabold text-zinc-300 dark:text-gray-800 opacity-50">03</span>
+                        <div class="relative z-10">
+                            <i data-lucide="layout-grid" class="w-12 h-12 text-primary-yellow mb-4"></i>
+                            <div class="flex space-x-2 mb-4">
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">BRAND</span>
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">PRODUCT</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Branding Design</h3>
+                            <p class="text-muted">
+                                Cunique totum numquam dolore hic montes elem entum tempor at velit.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Service Card 4 -->
+                    <div class="bg-card-light text-default p-8 rounded-2xl relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-yellow/20 hover:-translate-y-1 scale-in">
+                        <span class="absolute top-4 right-8 text-7xl font-extrabold text-zinc-300 dark:text-gray-800 opacity-50">04</span>
+                        <div class="relative z-10">
+                            <i data-lucide="move-3d" class="w-12 h-12 text-primary-yellow mb-4"></i>
+                            <div class="flex space-x-2 mb-4">
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">DESIGN</span>
+                                <span class="text-xs font-medium bg-zinc-200 dark:bg-gray-800 px-2 py-0.5 rounded-full text-muted">WEB</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">UI/UX Web Design</h3>
+                            <p class="text-muted">
+                                Cunique totum numquam dolore hic montes elem entum tempor at velit.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12 fade-in">
+                    <a href="#" class="bg-primary-yellow text-black font-bold px-8 py-3 rounded-full hover:bg-opacity-80 dark:hover:bg-white transition-colors">VIEW ALL SERVICES</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Skills (from 4.png) -->
+        <section id="skills" class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content (Text) -->
+                <div class="flex flex-col space-y-6 slide-in-left">
+                    <span class="font-medium text-muted">My Skills</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-default">Personal Skills & <span class="text-primary-yellow">Qualities.</span></h2>
+                    <p class="text-lg text-muted">
+                        Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices auctor enim possimus excepteur, vero, veritatis.
+                    </p>
+                </div>
+                
+                <!-- Right Content (Skill Bars) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 slide-in-right">
+                    <!-- Skill 1 -->
+                    <div class="bg-card p-6 rounded-xl stagger-item">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="figma" class="w-8 h-8 text-primary-yellow"></i>
+                                <span class="text-xl font-bold text-default">Figma</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary-yellow">95%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" data-width="95%"></div>
+                        </div>
+                    </div>
+                    <!-- Skill 2 -->
+                    <div class="bg-card p-6 rounded-xl stagger-item">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="pen-tool" class="w-8 h-8 text-primary-yellow"></i>
+                                <span class="text-xl font-bold text-default">Photoshop</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary-yellow">85%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" data-width="85%"></div>
+                        </div>
+                    </div>
+                    <!-- Skill 3 -->
+                    <div class="bg-card p-6 rounded-xl stagger-item">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="gem" class="w-8 h-8 text-primary-yellow"></i>
+                                <span class="text-xl font-bold text-default">Sketch</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary-yellow">90%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" data-width="90%"></div>
+                        </div>
+                    </div>
+                    <!-- Skill 4 -->
+                    <div class="bg-card p-6 rounded-xl stagger-item">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="pen-ruler" class="w-8 h-8 text-primary-yellow"></i>
+                                <span class="text-xl font-bold text-default">Illustrator</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary-yellow">96%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" data-width="96%"></div>
+                        </div>
+                    </div>
+                    <!-- Skill 5 -->
+                     <div class="bg-card p-6 rounded-xl stagger-item">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="html" class="w-8 h-8 text-primary-yellow"></i>
+                                <span class="text-xl font-bold text-default">HTML</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary-yellow">95%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" data-width="95%"></div>
+                        </div>
+                    </div>
+                    <!-- Skill 6 -->
+                     <div class="bg-card p-6 rounded-xl stagger-item">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="css" class="w-8 h-8 text-primary-yellow"></i>
+                                <span class="text-xl font-bold text-default">CSS</span>
+                            </div>
+                            <span class="text-lg font-bold text-primary-yellow">95%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" data-width="95%"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Brand Logo Section (from 4.png) -->
+            <div id="brands" class="mt-20 md:mt-32">
+                <div class="bg-card p-8 rounded-2xl shadow-lg relative overflow-hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                        <div>
+                            <span class="text-sm font-medium text-muted">Trusted by</span>
+                            <h3 class="text-2xl md:text-3xl font-extrabold text-default mt-1">
+                                Companies & Agencies <span class="text-primary-yellow">Worldwide</span>
+                            </h3>
+                        </div>
+                        <p class="text-sm text-muted mt-3 sm:mt-0 max-w-xl">
+                            Selected partners who trust my work — clean interfaces, reliable delivery and measurable results.
+                        </p>
+                    </div>
+
+                    <!-- subtle gradient/texture behind the logos -->
+                    <div class="pointer-events-none absolute inset-0 -z-10 opacity-20 dark:opacity-10">
+                        <div class="h-full w-full bg-gradient-to-r from-transparent via-primary-yellow/10 to-transparent dark:via-primary-yellow/6"></div>
+                    </div>
+
+                    <!-- Logo grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 items-center">
+                        <!-- Card 1 -->
+                        <div class="group flex flex-col items-center p-4 rounded-lg bg-white/60 dark:bg-white/5 border border-gray-100 dark:border-gray-800 transition transform hover:-translate-y-2 hover:scale-105 shadow-sm hover:shadow-primary-yellow/20">
+                            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all">
+                                <!-- simple monogram SVG (scales with text color) -->
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-primary-yellow">
+                                    <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-opacity="0.12" stroke-width="2" fill="none"/>
+                                    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial" font-size="12" font-weight="700" fill="currentColor">CM</text>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-semibold text-muted group-hover:text-default transition-colors">CLOUD MINING</span>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="group flex flex-col items-center p-4 rounded-lg bg-white/60 dark:bg-white/5 border border-gray-100 dark:border-gray-800 transition transform hover:-translate-y-2 hover:scale-105 shadow-sm hover:shadow-primary-yellow/20">
+                            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all">
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-primary-yellow">
+                                    <rect x="4" y="4" width="28" height="28" rx="6" stroke="currentColor" stroke-opacity="0.12" stroke-width="2" fill="none"/>
+                                    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial" font-size="10" font-weight="700" fill="currentColor">TS</text>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-semibold text-muted group-hover:text-default transition-colors">TECHNOLOGY SYSTEMS</span>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="group flex flex-col items-center p-4 rounded-lg bg-white/60 dark:bg-white/5 border border-gray-100 dark:border-gray-800 transition transform hover:-translate-y-2 hover:scale-105 shadow-sm hover:shadow-primary-yellow/20">
+                            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all">
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-primary-yellow">
+                                    <path d="M6 18c0 6.627 5.373 12 12 12s12-5.373 12-12S24.627 6 18 6 6 11.373 6 18z" stroke="currentColor" stroke-opacity="0.12" stroke-width="2" fill="none"/>
+                                    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial" font-size="10" font-weight="700" fill="currentColor">SM</text>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-semibold text-muted group-hover:text-default transition-colors">SWISS MADE</span>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="group flex flex-col items-center p-4 rounded-lg bg-white/60 dark:bg-white/5 border border-gray-100 dark:border-gray-800 transition transform hover:-translate-y-2 hover:scale-105 shadow-sm hover:shadow-primary-yellow/20">
+                            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all">
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-primary-yellow">
+                                    <rect x="6" y="8" width="24" height="20" rx="4" stroke="currentColor" stroke-opacity="0.12" stroke-width="2" fill="none"/>
+                                    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial" font-size="10" font-weight="700" fill="currentColor">AR</text>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-semibold text-muted group-hover:text-default transition-colors">AGENCY ROCKS</span>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="group flex flex-col items-center p-4 rounded-lg bg-white/60 dark:bg-white/5 border border-gray-100 dark:border-gray-800 transition transform hover:-translate-y-2 hover:scale-105 shadow-sm hover:shadow-primary-yellow/20">
+                            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 border border-gray-200 dark:border-gray-700 mb-3 overflow-hidden grayscale group-hover:grayscale-0 transition-all">
+                                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-primary-yellow">
+                                    <path d="M6 12h24v12H6z" stroke="currentColor" stroke-opacity="0.12" stroke-width="2" fill="none"/>
+                                    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, Arial" font-size="10" font-weight="700" fill="currentColor">DC</text>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-semibold text-muted group-hover:text-default transition-colors">DIGITAL COMPANY</span>
+                        </div>
+                    </div>
+
+                    <!-- small caption -->
+                    <p class="text-xs text-muted mt-6 text-center">Partner logos are representative — click or hover to reveal more about each collaboration.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW Section: Project Gallery -->
+        <section id="projects" class="py-20 md:py-32">
+            <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+                    <span class="font-medium text-muted">My Portfolio</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mt-2 mb-4 text-default">My Recent <span class="text-primary-yellow">Projects.</span></h2>
+                    <p class="text-lg text-muted">
+                        Here are a few design projects I've worked on recently.
+                    </p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div id="filter-buttons" class="flex flex-wrap justify-center gap-4 mb-12 fade-in">
+                    <button class="filter-btn active bg-card text-default font-medium px-5 py-2 rounded-full hover:bg-primary-yellow hover:text-black transition-colors" data-filter="all">All</button>
+                    <button class="filter-btn bg-card text-default font-medium px-5 py-2 rounded-full hover:bg-primary-yellow hover:text-black transition-colors" data-filter="web">Web Design</button>
+                    <button class="filter-btn bg-card text-default font-medium px-5 py-2 rounded-full hover:bg-primary-yellow hover:text-black transition-colors" data-filter="app">App Design</button>
+                    <button class="filter-btn bg-card text-default font-medium px-5 py-2 rounded-full hover:bg-primary-yellow hover:text-black transition-colors" data-filter="brand">Branding</button>
+                </div>
+
+                <!-- Project Grid -->
+                <div id="project-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project Item 1 -->
+                    <div class="gallery-item scale-in" data-category="web">
+                        <div class="bg-card rounded-lg overflow-hidden shadow-lg group">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Project 1" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-6">
+                                <span class="text-sm font-medium text-muted">Web Design</span>
+                                <h3 class="text-xl font-bold text-default mt-2 mb-3">E-commerce Website</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Item 2 -->
+                    <div class="gallery-item scale-in" data-category="app">
+                        <div class="bg-card rounded-lg overflow-hidden shadow-lg group">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Project 2" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-6">
+                                <span class="text-sm font-medium text-muted">App Design</span>
+                                <h3 class="text-xl font-bold text-default mt-2 mb-3">Mobile Banking App</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Item 3 -->
+                    <div class="gallery-item scale-in" data-category="brand">
+                        <div class="bg-card rounded-lg overflow-hidden shadow-lg group">
+                            <img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Project 3" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-6">
+                                <span class="text-sm font-medium text-muted">Branding</span>
+                                <h3 class="text-xl font-bold text-default mt-2 mb-3">Corporate Identity</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Item 4 -->
+                    <div class="gallery-item scale-in" data-category="web">
+                        <div class="bg-card rounded-lg overflow-hidden shadow-lg group">
+                            <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Project 4" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-6">
+                                <span class="text-sm font-medium text-muted">Web Design</span>
+                                <h3 class="text-xl font-bold text-default mt-2 mb-3">Portfolio Website</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Item 5 -->
+                    <div class="gallery-item scale-in" data-category="app">
+                        <div class="bg-card rounded-lg overflow-hidden shadow-lg group">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Project 5" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-6">
+                                <span class="text-sm font-medium text-muted">App Design</span>
+                                <h3 class="text-xl font-bold text-default mt-2 mb-3">Fitness Tracker</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project Item 6 -->
+                    <div class="gallery-item scale-in" data-category="brand">
+                        <div class="bg-card rounded-lg overflow-hidden shadow-lg group">
+                            <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Project 6" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-6">
+                                <span class="text-sm font-medium text-muted">Branding</span>
+                                <h3 class="text-xl font-bold text-default mt-2 mb-3">Logo Concept</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Testimonials (from 5.png) -->
+        <section id="testimonials" class="bg-zinc-200 dark:bg-card-dark py-20 md:py-32">
+            <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+                    <span class="font-medium text-muted">Testimonials</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mt-2 mb-4 text-default">Clients <span class="text-primary-yellow">Reviews.</span></h2>
+                    <p class="text-lg text-muted">
+                        Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices auctor enim possimus excepteur, vero, veritatis perspiciatis.
+                    </p>
+                </div>
+
+                <!-- Testimonials Carousel -->
+                <div class="testimonial-carousel relative">
+                    <div class="testimonial-track flex transition-transform duration-500 ease-in-out">
+                        <!-- Testimonial Slide 1 -->
+                        <div class="testimonial-slide px-4">
+                            <div class="bg-card-light text-default p-8 rounded-2xl relative h-full">
+                                <i data-lucide="quote" class="absolute top-6 right-6 w-20 h-20 text-zinc-300 dark:text-gray-800 opacity-50"></i>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="Robert Wilson" class="w-16 h-16 rounded-full">
+                                    <div>
+                                        <h3 class="text-xl font-bold">Robert Wilson</h3>
+                                        <span class="text-muted">Customer, Client</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1 mb-4">
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                </div>
+                                <p class="text-lg text-muted italic relative">
+                                    
+                                    Quisque dignissim dui labore eget architecto phasellus mollit amet felis, tempus curae possimus eros lobortis exercitation perspiciatis. Incididunt! Ducimus fugiat sociis omnis ducimus viverra quasi nonummy dolores non phasellus mollit.
+                                    
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonial Slide 2 -->
+                        <div class="testimonial-slide px-4">
+                            <div class="bg-card-light text-default p-8 rounded-2xl relative h-full">
+                                <i data-lucide="quote" class="absolute top-6 right-6 w-20 h-20 text-zinc-300 dark:text-gray-800 opacity-50"></i>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="Sally Alison" class="w-16 h-16 rounded-full">
+                                    <div>
+                                        <h3 class="text-xl font-bold">Sally Alison</h3>
+                                        <span class="text-muted">Customer, Client</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1 mb-4">
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star-empty"></span>
+                                </div>
+                                <p class="text-lg text-muted italic relative">
+                                    
+                                    Quisque dignissim dui labore eget architecto phasellus mollit amet felis, tempus curae possimus eros lobortis exercitation perspiciatis. Incididunt! Ducimus fugiat sociis omnis ducimus viverra quasi nonummy dolores non phasellus mollit.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonial Slide 3 -->
+                        <div class="testimonial-slide px-4">
+                            <div class="bg-card-light text-default p-8 rounded-2xl relative h-full">
+                                <i data-lucide="quote" class="absolute top-6 right-6 w-20 h-20 text-zinc-300 dark:text-gray-800 opacity-50"></i>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="John Peterson" class="w-16 h-16 rounded-full">
+                                    <div>
+                                        <h3 class="text-xl font-bold">John Peterson</h3>
+                                        <span class="text-muted">Business Owner</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1 mb-4">
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                </div>
+                                <p class="text-lg text-muted italic relative">
+                                    
+                                    Absolutely phenomenal work! The attention to detail and creative approach resulted in a website that perfectly represents our brand. The entire process was smooth and professional from start to finish.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonial Slide 4 -->
+                        <div class="testimonial-slide px-4">
+                            <div class="bg-card-light text-default p-8 rounded-2xl relative h-full">
+                                <i data-lucide="quote" class="absolute top-6 right-6 w-20 h-20 text-zinc-300 dark:text-gray-800 opacity-50"></i>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=64&h=64&q=80" alt="Sarah Johnson" class="w-16 h-16 rounded-full">
+                                    <div>
+                                        <h3 class="text-xl font-bold">Sarah Johnson</h3>
+                                        <span class="text-muted">Marketing Director</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1 mb-4">
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star-empty"></span>
+                                </div>
+                                <p class="text-lg text-muted italic relative">
+                                    
+                                    Working with this designer was a game-changer for our online presence. They understood our vision immediately and delivered beyond our expectations. The user experience of our new site is flawless.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Carousel Navigation Dots -->
+                    <div class="flex justify-center mt-8 space-x-2">
+                        <button class="carousel-dot active" data-slide="0"></button>
+                        <button class="carousel-dot" data-slide="1"></button>
+                        <button class="carousel-dot" data-slide="2"></button>
+                        <button class="carousel-dot" data-slide="3"></button>
+                    </div>
+                    
+                    <!-- Carousel Navigation Arrows -->
+                    <button class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-primary-yellow transition-colors hidden md:block" id="prev-testimonial">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </button>
+                    <button class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-primary-yellow transition-colors hidden md:block" id="next-testimonial">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                
+                <div class="text-center mt-12 fade-in">
+                    <a href="#" class="bg-primary-yellow text-black font-bold px-8 py-3 rounded-full hover:bg-opacity-80 dark:hover:bg-white transition-colors">VIEW ALL REVIEWS</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW Section: Blog -->
+        <section id="blog" class="py-20 md:py-32">
+            <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 fade-in">
+                    <span class="font-medium text-muted">From The Blog</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mt-2 mb-4 text-default">Recent <span class="text-primary-yellow">Blog</span> Posts.</h2>
+                    <p class="text-lg text-muted">
+                        Check out my latest articles and insights on design and technology.
+                    </p>
+                </div>
+
+                <!-- Blog Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Blog Post 1 -->
+                    <div class="bg-card rounded-lg overflow-hidden shadow-lg group scale-in">
+                        <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Blog Post 1" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-primary-yellow">UI/UX Design</span>
+                            <h3 class="text-xl font-bold text-default mt-2 mb-3">10 Tips for a Better User Experience</h3>
+                            <p class="text-muted mb-4">
+                                Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices...
+                            </p>
+                            <a href="#" class="font-medium text-primary-yellow hover:text-opacity-80 transition-colors">Read More <i data-lucide="arrow-right" class="inline w-4 h-4"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Post 2 -->
+                    <div class="bg-card rounded-lg overflow-hidden shadow-lg group scale-in">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Blog Post 2" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-primary-yellow">Development</span>
+                            <h3 class="text-xl font-bold text-default mt-2 mb-3">Why Tailwind CSS is Amazing</h3>
+                            <p class="text-muted mb-4">
+                                Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices...
+                            </p>
+                            <a href="#" class="font-medium text-primary-yellow hover:text-opacity-80 transition-colors">Read More <i data-lucide="arrow-right" class="inline w-4 h-4"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Post 3 -->
+                    <div class="bg-card rounded-lg overflow-hidden shadow-lg group scale-in">
+                        <img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=400&q=80" alt="Blog Post 3" class="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-primary-yellow">Branding</span>
+                            <h3 class="text-xl font-bold text-default mt-2 mb-3">The Art of Minimalist Logo Design</h3>
+                            <p class="text-muted mb-4">
+                                Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices...
+                            </p>
+                            <a href="#" class="font-medium text-primary-yellow hover:text-opacity-80 transition-colors">Read More <i data-lucide="arrow-right" class="inline w-4 h-4"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Section 6: Contact CTA & Footer (from 6.jpg) -->
+        <section id="contact" class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+            <!-- Contact CTA -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="slide-in-left">
+                    <span class="font-medium text-muted">Do You Have A Project In Mind?</span>
+                    <h2 class="text-6xl md:text-7xl font-extrabold text-default mt-2 mb-6">Let's <span class="text-primary-yellow">Talk !</span></h2>
+                    <p class="text-lg text-muted">
+                        Cunique totum numquam dolorem hic montes elementum tempor at velit ultrices auctor enim possimus excepteur.
+                    </p>
+                    
+                    <!-- Contact Info -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-12">
+                        <div>
+                            <span class="font-medium text-muted">Map Direction</span>
+                            <p class="text-xl font-semibold mt-1 text-default">I Am Available Here</p>
+                            
+                            <span class="font-medium text-muted mt-6 block">Contact Me At</span>
+                            <a href="tel:+2356859124" class="text-xl font-semibold mt-1 block text-default hover:text-primary-yellow">(00) +2356-859-124</a>
+                        </div>
+                        <div>
+                            <span class="font-medium text-muted">Email Me Through</span>
+                            <a href="mailto:kepert@example.com" class="text-xl font-semibold mt-1 block text-default hover:text-primary-yellow">kepert@example.com</a>
+                            
+                            <span class="font-medium text-muted mt-6 block">My Available Timing</span>
+                            <p class="text-xl font-semibold mt-1 text-default">09:30AM - 8:30PM</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NEW Contact Form -->
+                <div class="bg-card p-8 rounded-2xl shadow-lg slide-in-right">
+                    <h3 class="text-3xl font-bold text-default mb-6">Send Me A Message</h3>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-muted">Your Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full px-4 py-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 border-transparent focus:border-primary-yellow focus:ring-0 text-default" placeholder="Thomas Kepert">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-muted">Your Email</label>
+                            <input type="email" name="email" id="email" required class="mt-1 block w-full px-4 py-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 border-transparent focus:border-primary-yellow focus:ring-0 text-default" placeholder="hello@example.com">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-muted">Subject</label>
+                            <input type="text" name="subject" id="subject" required class="mt-1 block w-full px-4 py-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 border-transparent focus:border-primary-yellow focus:ring-0 text-default" placeholder="Project Inquiry">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-muted">Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-4 py-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 border-transparent focus:border-primary-yellow focus:ring-0 text-default" placeholder="Your message..."></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-primary-yellow text-black font-bold px-8 py-3 rounded-full hover:bg-opacity-80 dark:hover:bg-white transition-colors">
+                                Send Message
+                            </button>
+                        </div>
+                        <p id="form-success" class="text-green-500 hidden text-center">Message sent successfully!</p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative bg-zinc-200 dark:bg-card-dark text-default pt-12 pb-8">
+
+
+        <div class="container max-w-6xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                <!-- CTA -->
+                <div class="md:col-span-1">
+                    <a href="#" class="inline-flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary-yellow flex items-center justify-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-black"><path d="M12 2L15 9H22L17 14L19 21L12 17L5 21L7 14L2 9H9L12 2Z" fill="currentColor"/></svg>
+                        </div>
+                        <div>
+                            <div class="font-extrabold text-lg leading-tight">Shamim's <span class="text-black bg-primary-yellow px-1 rounded">BIO</span></div>
+                            <div class="text-sm text-muted">Design-led dev & product strategy</div>
+                        </div>
+                    </a>
+
+                    <p class="text-muted mb-4">I build accessible, conversion-focused digital products. Fast iterations, clear communication, measurable outcomes.</p>
+
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="p-2 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"><i data-lucide="facebook" class="w-5 h-5 text-default"></i></a>
+                        <a href="#" class="p-2 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"><i data-lucide="twitter" class="w-5 h-5 text-default"></i></a>
+                        <a href="#" class="p-2 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"><i data-lucide="instagram" class="w-5 h-5 text-default"></i></a>
+                        <a href="#" class="p-2 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"><i data-lucide="linkedin" class="w-5 h-5 text-default"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="grid grid-cols-2 gap-6 md:col-span-1">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-200 mb-3">Explore</h4>
+                        <ul class="space-y-2 text-muted text-sm">
+                            <li><a href="#about" class="hover:text-primary-yellow transition-colors">About</a></li>
+                            <li><a href="#services" class="hover:text-primary-yellow transition-colors">Services</a></li>
+                            <li><a href="#projects" class="hover:text-primary-yellow transition-colors">Portfolio</a></li>
+                            <li><a href="#blog" class="hover:text-primary-yellow transition-colors">Blog</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-200 mb-3">Resources</h4>
+                        <ul class="space-y-2 text-muted text-sm">
+                            <li><a href="#" class="hover:text-primary-yellow transition-colors">Case Studies</a></li>
+                            <li><a href="#" class="hover:text-primary-yellow transition-colors">Pricing</a></li>
+                            <li><a href="#" class="hover:text-primary-yellow transition-colors">Careers</a></li>
+                            <li><a href="#" class="hover:text-primary-yellow transition-colors">Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Newsletter compact -->
+                <div class="md:col-span-1">
+                    <h4 class="text-sm font-semibold text-gray-200 mb-3">Stay in the loop</h4>
+                    <p class="text-muted text-sm mb-4">Occasional design tips, case studies and launch notes. No spam.</p>
+
+                    <form id="newsletter-form" class="flex gap-3">
+                        <label for="newsletter" class="sr-only">Email</label>
+                        <input id="newsletter" type="email" placeholder="you@company.com" required
+                               class="flex-1 px-4 py-3 rounded-lg bg-zinc-100 dark:bg-zinc-800 border-transparent focus:border-primary-yellow focus:ring-0 text-default placeholder:text-muted">
+                        <button type="submit" class="px-4 py-3 rounded-lg bg-primary-yellow text-black font-semibold hover:opacity-95 transition">Subscribe</button>
+                    </form>
+
+                    <p id="newsletter-success" class="mt-3 text-sm text-green-400 hidden">Thanks — check your inbox.</p>
+
+                    <div class="mt-6 text-sm text-muted space-y-2">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-4 h-4 text-primary-yellow"></i>
+                            <a href="mailto:hello@shamimbio.dev" class="hover:text-primary-yellow transition-colors">hello@shamimbio.dev</a>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-4 h-4 text-primary-yellow"></i>
+                            <a href="tel:+1234567890" class="hover:text-primary-yellow transition-colors">+1 (234) 567‑890</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Small divider -->
+            <div class="mt-10 border-t border-white/6 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-sm text-muted">© <span id="current-year"></span> Shamim's Bio — All rights reserved.</div>
+
+                <div class="flex items-center gap-4 text-sm">
+                    <a href="#" class="text-muted hover:text-primary-yellow transition">Privacy</a>
+                    <a href="#" class="text-muted hover:text-primary-yellow transition">Terms</a>
+                    <a href="#contact" class="inline-flex items-center gap-2 text-primary-yellow font-semibold hover:underline">
+                        <i data-lucide="send" class="w-4 h-4"></i> Get in touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" class="fixed bottom-6 right-6 bg-primary-yellow text-black p-3 rounded-full shadow-lg hidden hover:bg-opacity-80 dark:hover:bg-white transition-colors z-50">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </button>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // --- Dark Mode Toggle ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const sunIcon = document.getElementById('theme-icon-sun');
+        const moonIcon = document.getElementById('theme-icon-moon');
+        const sunIconMobile = document.getElementById('theme-icon-sun-mobile');
+        const moonIconMobile = document.getElementById('theme-icon-moon-mobile');
+        const html = document.documentElement;
+
+        // Function to set theme
+        function setTheme(isDark) {
+            if (isDark) {
+                html.classList.add('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+                sunIconMobile.classList.remove('hidden');
+                moonIconMobile.classList.add('hidden');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+                sunIconMobile.classList.add('hidden');
+                moonIconMobile.classList.remove('hidden');
+                localStorage.setItem('theme', 'light');
+            }
+            // Re-initialize icons after class changes
+            lucide.createIcons();
+        }
+
+        // Check for saved theme
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Set initial theme
+        const initialDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+        setTheme(initialDark);
+
+        // Toggle listener
+        const toggleHandler = () => {
+            setTheme(!html.classList.contains('dark'));
+        };
+        themeToggle.addEventListener('click', toggleHandler);
+        themeToggleMobile.addEventListener('click', toggleHandler);
+
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- Scroll to Top Button ---
+        const scrollToTopButton = document.getElementById('scroll-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopButton.classList.remove('hidden');
+            } else {
+                scrollToTopButton.classList.add('hidden');
+            }
+        });
+        
+        scrollToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // --- Set current year in footer ---
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // --- Project Gallery Filter ---
+        const filterButtons = document.querySelectorAll('#filter-buttons .filter-btn');
+        const galleryItems = document.querySelectorAll('#project-gallery .gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Set active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                // Show/hide gallery items
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // --- Contact Form ---
+        const contactForm = document.getElementById('contact-form');
+        const formSuccessMessage = document.getElementById('form-success');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Here you would typically send the form data to a server
+            // For this demo, we'll just show a success message
+            formSuccessMessage.classList.remove('hidden');
+            contactForm.reset();
+
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                formSuccessMessage.classList.add('hidden');
+            }, 3000);
+        });
+
+        // --- Lazy Loading Animations ---
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // If it's a progress bar, animate it
+                    if (entry.target.classList.contains('progress-bar-inner')) {
+                        const width = entry.target.getAttribute('data-width');
+                        setTimeout(() => {
+                            entry.target.style.width = width;
+                        }, 300);
+                    }
+                    
+                    // If it's a stagger item, add delay based on index
+                    if (entry.target.classList.contains('stagger-item')) {
+                        const index = Array.from(entry.target.parentNode.children).indexOf(entry.target);
+                        entry.target.style.transitionDelay = `${index * 0.1}s`;
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with animation classes
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in, .stagger-item, .progress-bar-inner').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Animate skill bars when skills section is in view
+        const skillsSection = document.getElementById('skills');
+        const skillBars = document.querySelectorAll('.progress-bar-inner');
+        
+        const skillsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    skillBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 300);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        if (skillsSection) {
+            skillsObserver.observe(skillsSection);
+        }
+
+        // --- Testimonial Carousel ---
+        const testimonialTrack = document.querySelector('.testimonial-track');
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevButton = document.getElementById('prev-testimonial');
+        const nextButton = document.getElementById('next-testimonial');
+        
+        let currentSlide = 0;
+        let slideInterval;
+        const slideCount = testimonialSlides.length;
+        
+        // Function to update carousel position
+        function updateCarousel() {
+            // Calculate the number of slides to show based on screen width
+            let slidesToShow = 1;
+            if (window.innerWidth >= 768) slidesToShow = 2;
+            if (window.innerWidth >= 1024) slidesToShow = 3;
+            
+            // Calculate the transform value
+            const translateX = -(currentSlide * (100 / slidesToShow));
+            testimonialTrack.style.transform = `translateX(${translateX}%)`;
+            
+            // Update active dot
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        // Function to go to a specific slide
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            if (currentSlide >= slideCount) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slideCount - 1;
+            updateCarousel();
+        }
+        
+        // Function to go to next slide
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+        
+        // Function to start auto sliding
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+        }
+        
+        // Function to stop auto sliding
+        function stopAutoSlide() {
+            clearInterval(slideInterval);
+        }
+        
+        // Initialize carousel
+        updateCarousel();
+        startAutoSlide();
+        
+        // Event listeners for navigation
+        prevButton.addEventListener('click', () => {
+            stopAutoSlide();
+            goToSlide(currentSlide - 1);
+            startAutoSlide();
+        });
+        
+        nextButton.addEventListener('click', () => {
+            stopAutoSlide();
+            nextSlide();
+            startAutoSlide();
+        });
+        
+        // Event listeners for dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                stopAutoSlide();
+                const slideIndex = parseInt(dot.getAttribute('data-slide'));
+                goToSlide(slideIndex);
+                startAutoSlide();
+            });
+        });
+        
+        // Pause auto sliding when hovering over carousel
+        testimonialTrack.addEventListener('mouseenter', stopAutoSlide);
+        testimonialTrack.addEventListener('mouseleave', startAutoSlide);
+        
+        // Update carousel on window resize
+        window.addEventListener('resize', updateCarousel);
+
+    </script>
+
+</body>
+</html>

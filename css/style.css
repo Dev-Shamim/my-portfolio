@@ -1,5 +1,4 @@
-
-        /* Base font */
+/* Base font */
         body {
             font-family: 'Inter', sans-serif;
             /* Light mode background */
@@ -185,22 +184,23 @@
         
         .testimonial-track {
             display: flex;
+            width: calc(200%);
             transition: transform 0.5s ease-in-out;
         }
         
         .testimonial-slide {
-            flex: 0 0 100%;
+            flex: 0 0 33.333%;
         }
         
-        @media (min-width: 768px) {
+        @media (max-width: 1024px) {
             .testimonial-slide {
                 flex: 0 0 50%;
             }
         }
         
-        @media (min-width: 1024px) {
+        @media (max-width: 768px) {
             .testimonial-slide {
-                flex: 0 0 33.333%;
+                flex: 0 0 100%;
             }
         }
         
@@ -216,4 +216,29 @@
         .carousel-dot.active {
             background-color: #DFFF00;
         }
-    
+		/* Brands carousel styles */
+		.brands-carousel {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.brands-track {
+			display: flex;
+			width: calc(200%); /* 2x the number of original slides */
+		}
+
+		.brands-slide {
+			flex: 0 0 20%; /* Show 5 slides by default */
+		}
+
+		@media (max-width: 768px) {
+			.brands-slide {
+				flex: 0 0 33.333%; /* Show 3 slides on medium screens */
+			}
+		}
+
+		@media (max-width: 640px) {
+			.brands-slide {
+				flex: 0 0 50%; /* Show 2 slides on small screens */
+			}
+		}

@@ -1,38 +1,98 @@
 // Brands carousel auto-slide
+const brandsCarousel = document.querySelector('.brands-carousel');
 const brandsTrack = document.querySelector('.brands-track');
 const brandsSlides = document.querySelectorAll('.brands-slide');
+const prevBrandButton = document.getElementById('prev-brand');
+const nextBrandButton = document.getElementById('next-brand');
+
 let brandCurrentSlide = 0;
 let brandInterval;
-const brandSlideCount = brandsSlides.length;
 
-function updateBrandsCarousel() {
+const setupBrandsCarousel = () => {
+    // Clone slides for infinite effect
+    brandsSlides.forEach(slide => {
+        const clone = slide.cloneNode(true);
+        brandsTrack.appendChild(clone);
+    });
+
+    const allBrandSlides = document.querySelectorAll('.brands-slide');
+    const brandSlideCount = allBrandSlides.length;
+
     let slidesToShow = 2;
     if (window.innerWidth >= 640) slidesToShow = 3;
     if (window.innerWidth >= 768) slidesToShow = 5;
-    
-    const translateX = -(brandCurrentSlide * (100 / slidesToShow));
-    brandsTrack.style.transform = `translateX(${translateX}%)`;
-}
 
-function nextBrandSlide() {
-    brandCurrentSlide = (brandCurrentSlide + 1) % brandSlideCount;
+    function updateBrandsCarousel() {
+        const translateX = - (brandCurrentSlide * (100 / slidesToShow));
+        brandsTrack.style.transition = 'transform 0.5s ease-in-out';
+        brandsTrack.style.transform = `translateX(${translateX}%)`;
+
+        if (brandCurrentSlide >= brandsSlides.length) {
+            setTimeout(() => {
+                brandsTrack.style.transition = 'none';
+                brandCurrentSlide = 0;
+                brandsTrack.style.transform = `translateX(0%)`;
+            }, 500);
+        }
+    }
+
+    function nextBrandSlide() {
+        brandCurrentSlide++;
+        updateBrandsCarousel();
+    }
+
+    function prevBrandSlide() {
+        if (brandCurrentSlide === 0) {
+            brandCurrentSlide = brandsSlides.length;
+            const translateX = - (brandCurrentSlide * (100 / slidesToShow));
+            brandsTrack.style.transition = 'none';
+            brandsTrack.style.transform = `translateX(${translateX}%)`;
+            setTimeout(() => {
+                brandCurrentSlide--;
+                brandsTrack.style.transition = 'transform 0.5s ease-in-out';
+                updateBrandsCarousel();
+            }, 50);
+        } else {
+            brandCurrentSlide--;
+            updateBrandsCarousel();
+        }
+    }
+
+    function startBrandAutoSlide() {
+        brandInterval = setInterval(nextBrandSlide, 3000);
+    }
+
+    function stopBrandAutoSlide() {
+        clearInterval(brandInterval);
+    }
+
+    // Event Listeners
+    nextBrandButton.addEventListener('click', () => {
+        stopBrandAutoSlide();
+        nextBrandSlide();
+        startBrandAutoSlide();
+    });
+
+    prevBrandButton.addEventListener('click', () => {
+        stopBrandAutoSlide();
+        prevBrandSlide();
+        startBrandAutoSlide();
+    });
+
+    brandsCarousel.addEventListener('mouseenter', stopBrandAutoSlide);
+    brandsCarousel.addEventListener('mouseleave', startBrandAutoSlide);
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 640) slidesToShow = 3;
+        if (window.innerWidth >= 768) slidesToShow = 5;
+        updateBrandsCarousel();
+    });
+
+    startBrandAutoSlide();
     updateBrandsCarousel();
-}
+};
 
-function startBrandAutoSlide() {
-    brandInterval = setInterval(nextBrandSlide, 4000);
-}
-
-function stopBrandAutoSlide() {
-    clearInterval(brandInterval);
-}
-
-updateBrandsCarousel();
-startBrandAutoSlide();
-
-brandsTrack.addEventListener('mouseenter', stopBrandAutoSlide);
-brandsTrack.addEventListener('mouseleave', startBrandAutoSlide);
-window.addEventListener('resize', updateBrandsCarousel);
+setupBrandsCarousel();
 
 // Initialize Lucide icons
 lucide.createIcons();
@@ -225,34 +285,48 @@ let currentSlide = 0;
 let slideInterval;
 const slideCount = testimonialSlides.length;
 
+// Clone slides for infinite effect
+testimonialSlides.forEach(slide => {
+    const clone = slide.cloneNode(true);
+    testimonialTrack.appendChild(clone);
+});
+
 // Function to update carousel position
 function updateCarousel() {
-    // Calculate the number of slides to show based on screen width
+    const allSlides = document.querySelectorAll('.testimonial-slide');
+    const allSlidesCount = allSlides.length;
     let slidesToShow = 1;
     if (window.innerWidth >= 768) slidesToShow = 2;
     if (window.innerWidth >= 1024) slidesToShow = 3;
-    
-    // Calculate the transform value
+
     const translateX = -(currentSlide * (100 / slidesToShow));
+    testimonialTrack.style.transition = 'transform 0.5s ease-in-out';
     testimonialTrack.style.transform = `translateX(${translateX}%)`;
-    
+
     // Update active dot
     dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentSlide);
+        dot.classList.toggle('active', index === (currentSlide % slideCount));
     });
+
+    if (currentSlide >= slideCount) {
+        setTimeout(() => {
+            testimonialTrack.style.transition = 'none';
+            currentSlide = 0;
+            testimonialTrack.style.transform = `translateX(0%)`;
+        }, 500);
+    }
 }
 
 // Function to go to a specific slide
 function goToSlide(slideIndex) {
     currentSlide = slideIndex;
-    if (currentSlide >= slideCount) currentSlide = 0;
-    if (currentSlide < 0) currentSlide = slideCount - 1;
     updateCarousel();
 }
 
 // Function to go to next slide
 function nextSlide() {
-    goToSlide(currentSlide + 1);
+    currentSlide++;
+    updateCarousel();
 }
 
 // Function to start auto sliding
@@ -272,7 +346,19 @@ startAutoSlide();
 // Event listeners for navigation
 prevButton.addEventListener('click', () => {
     stopAutoSlide();
-    goToSlide(currentSlide - 1);
+    if (currentSlide === 0) {
+        currentSlide = slideCount;
+        testimonialTrack.style.transition = 'none';
+        const translateX = -(currentSlide * (100 / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1)));
+        testimonialTrack.style.transform = `translateX(${translateX}%)`;
+        setTimeout(() => {
+            currentSlide--;
+            updateCarousel();
+        }, 50);
+    } else {
+        currentSlide--;
+        updateCarousel();
+    }
     startAutoSlide();
 });
 
